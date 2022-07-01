@@ -1,9 +1,13 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+from streamlit.scriptrunner import get_script_run_ctx
 
 np.random.seed(0)
 PAGE_SLOT = "Home"
+
+ctx = get_script_run_ctx()
+print(ctx.query_string)
 
 
 @st.cache

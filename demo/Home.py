@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from streamlit_state import create_store, get_store, get_state, set_state, form_update
+from fire_state import create_store, get_store, get_state, set_state, form_update
 
 np.random.seed(0)
 PAGE_SLOT = "Home"
