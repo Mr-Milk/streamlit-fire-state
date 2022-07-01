@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "streamlit-state"
+name = "fire-state"
 version = "0.1.0"
 description = ""
 authors = ["Mr-Milk <yb97643@um.edu.mo>"]
