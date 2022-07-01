@@ -28,7 +28,7 @@ class Storage:
         register_keys = []
         origin_keys = []
         for k, v in items:
-            register_key = f"{slot}-{k}"
+            register_key = f"__{slot}-{k}__"
             if k not in obj_keys:
                 write_obj[k] = v
                 st.session_state[register_key] = v
