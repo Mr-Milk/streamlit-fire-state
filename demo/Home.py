@@ -21,7 +21,7 @@ def chart_data(line_count, data_size):
         columns=np.random.choice(list('abcdefghijlkmn'), line_count))
 
 
-st.header("A form to configure plot")
+st.markdown("# :fire:Streamlit fire state")
 st.info("States in this page will be preserved.")
 
 with st.form(key="a form"):
