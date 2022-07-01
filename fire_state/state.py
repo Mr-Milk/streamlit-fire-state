@@ -1,6 +1,7 @@
 from typing import List, Tuple, Any
 
 import streamlit as st
+from streamlit.scriptrunner import get_script_run_ctx
 
 
 class Storage:
@@ -8,6 +9,7 @@ class Storage:
     def __init__(self):
         self._store = dict()
         self._slot_keys = dict()
+        self._slot_sessions = dict()
 
     def _get_write_slot(self, slot, check=True):
         if slot not in self._store.keys():
@@ -20,6 +22,16 @@ class Storage:
 
     def _store_keys(self, slot):
         return set(self._store[slot].keys())
+
+    def update_slot_session(self, slot, session_id):
+        """Return True the slot is going to be updated, Return False the slot is going to be created"""
+        prev_id = self._slot_sessions.get(slot)
+        self._slot_sessions[slot] = session_id
+        # user session is changed
+        if (prev_id is None) or (prev_id != session_id):
+            return True
+        else:
+            return False
 
     def create(self, slot, items):
         write_obj = self._get_write_slot(slot, check=False)
@@ -59,6 +71,10 @@ class Storage:
 store = Storage()
 
 
+def _get_session_id():
+    return get_script_run_ctx().session_id
+
+
 def create_store(slot: str, states: List) -> List[str]:
     """Create a storage, specific your initial value here
 
@@ -84,7 +100,12 @@ def create_store(slot: str, states: List) -> List[str]:
         A list of keys to use in form to preserve state
 
     """
-    return store.create(slot, states)
+    session_id = _get_session_id()
+    updated = store.update_slot_session(slot, session_id)
+    keys = store.create(slot, states)
+    if updated:
+        set_store(slot, states)
+    return keys
 
 
 def set_store(slot, states):
