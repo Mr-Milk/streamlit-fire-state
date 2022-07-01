@@ -22,8 +22,7 @@ pip install fire-state
 import streamlit as st
 from fire_state import create_store, form_update
 
-# register your state with initiate values
-# the slot is an identifier for your state
+# register state with initiate values in a slot
 slot = "home_page"
 key1, key2 = create_store(slot, [
     ("state1", 5),
@@ -38,27 +37,30 @@ with st.form("my form"):
 
 ```
 
-Great, just create a store and the pass the keys to your form, and you are good to go.
+When you switch between page, the state will be preserved.
 
-In production, it's recommended that you warp the `create_store` in a `@st.cache`
+### Persist state in anyplace
 
 ```python
 import streamlit as st
-from fire_state import create_store
-
-slot = "page"
+from fire_state import create_store, get_state, set_state
 
 
-@st.cache
-def init_state():
-    return create_store(slot, [
-        ("state1", 5),
-        ("state2", 12),
-    ])
+slot = "home_page"
+create_store(slot, [
+    ("state1", 0),
+])
+
+def increment():
+    prev = get_state(slot, "state1")
+    set_state(slot, ("state1", prev + 1))
 
 
-key1, key2 = init_state()
+st.button("+1", on_click=increment)
+st.text(f"Value: {get_state(slot, 'state1')}")
 ```
+
+## Advanced Usage
 
 ### Persist state after form submission
 
@@ -111,51 +113,41 @@ if (prev_run_state != 0) or run:
 ```
 
 The idea is that the first time user open the page, they never click the run button,
-so it's value is 0, the number of time they click it. 
-When it no longer is 0, that means user clicked it. The plot will always be rendering.
+so the number time they click a button is 0, we can use it as a reference to record the state
+of the button. 
+
+When it no longer is 0, that means user clicked it. Hence, The plot will always be rendered or updated.
 
 
-### Working with non-form widget
+### Reset the state
 
-It's strongly recommended that you work with form for user input.
-It batches user events and won't refresh
-the page at every `on_change` event.
-
-If you are not working with user input. You need to update the state manually.
+If you want to allow user to reset the state:
 
 ```python
+import streamlit as st
 from fire_state import create_store, \
     get_store, set_store, \
     get_state, set_state
 
 slot = "page"
-create_store(slot, [
+init_state = [
     ("state1", 1),
     ("state2", 2),
     ("state3", 3),
-    ("state4", 4)
-])
+]
+create_store(slot, init_state)
+
+def reset():
+    set_store(slot, init_state)
+
+st.button("Reset", on_click=reset)
 ```
 
-To change a state value
-```python
-set_state(slot, ("state2", 3))
-```
-
-To read a state value
-```python
-get_state(slot, "state2") # return 3
-```
-
-Or you can change and read in batch
-```python
-set_store(slot, [
-    ("state3", 13),
-    ("state4", 14)
-])
-
-get_store(slot) # return a dict
-```
+The `set_store` and `get_store` functions allow you to
+modify and get your state in batch.
 
 
+## The Life Cycle of State
 
+The state will persist if you don't close the page or refresh. The state instance
+will only be destroyed if you stop your app.
