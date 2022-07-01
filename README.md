@@ -1,14 +1,17 @@
-# Streamlit State
+# Streamlit fire state
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mr-milk-streamlit-state-demohome-mqsp3p.streamlitapp.com/)
+![pypi version](https://img.shields.io/pypi/v/fire-state?color=black&logo=python&logoColor=white&style=flat)
 
 In multipage streamlit app, one of the most headache issues
 is your state will not preserve if you switch between pages.
 
-That's why streamlit-state is here for you.
+That's why fire-state is here for you.
 
 ## Installation
 
 ```shell
-pip install streamlit-state
+pip install fire-state
 ```
 
 ## Quick Start
@@ -17,7 +20,7 @@ pip install streamlit-state
 
 ```python
 import streamlit as st
-from streamlit_state import create_store, form_update
+from fire_state import create_store, form_update
 
 # register your state with initiate values
 # the slot is an identifier for your state
@@ -41,9 +44,10 @@ In production, it's recommended that you warp the `create_store` in a `@st.cache
 
 ```python
 import streamlit as st
-from streamlit_state import create_store
+from fire_state import create_store
 
 slot = "page"
+
 
 @st.cache
 def init_state():
@@ -51,6 +55,7 @@ def init_state():
         ("state1", 5),
         ("state2", 12),
     ])
+
 
 key1, key2 = init_state()
 ```
@@ -83,7 +88,7 @@ This is very similar to the first example, except we add other state
 for the run button.
 
 ```python
-from streamlit_state import create_store, get_state, set_state, form_update
+from fire_state import create_store, get_state, set_state, form_update
 
 PAGE_SLOT = "Home_Page"
 key1, key2, key3 = create_store(PAGE_SLOT, [
@@ -91,7 +96,6 @@ key1, key2, key3 = create_store(PAGE_SLOT, [
     ("data_size", 13),
     ("run", 0)
 ])
-
 
 with st.form(key="a form"):
     line_count = st.slider("Line Count", 1, 10, step=1, key=key1)
@@ -120,7 +124,7 @@ the page at every `on_change` event.
 If you are not working with user input. You need to update the state manually.
 
 ```python
-from streamlit_state import create_store, \
+from fire_state import create_store, \
     get_store, set_store, \
     get_state, set_state
 
