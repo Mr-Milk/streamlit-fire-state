@@ -11,7 +11,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v2
+        uses: abatilo/actions-poetry@v2.1.5
       - name: Install dependencies
         run: poetry install
       - name: Build the package
