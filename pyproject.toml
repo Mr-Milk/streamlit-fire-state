@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fire-state"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Mr-Milk <yb97643@um.edu.mo>"]
 license = "MIT"

@@ -3,8 +3,8 @@
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mr-milk-streamlit-state-demohome-mqsp3p.streamlitapp.com/)
 ![pypi version](https://img.shields.io/pypi/v/fire-state?color=black&logo=python&logoColor=white&style=flat)
 
-In multipage streamlit app, one of the most headache issues
-is your state will not preserve if you switch between pages.
+In a multipage streamlit app, one of the most headache issues 
+is that your state is not preserved if you switch between pages.
 
 That's why fire-state is here for you.
 
@@ -22,7 +22,7 @@ pip install fire-state
 import streamlit as st
 from fire_state import create_store, form_update
 
-# register state with initiate values in a slot
+# Register state with initiate values in a slot
 slot = "home_page"
 key1, key2 = create_store(slot, [
     ("state1", 5),
@@ -37,9 +37,11 @@ with st.form("my form"):
 
 ```
 
-When you switch between page, the state will be preserved.
+When you switch between pages, the states are preserved.
 
-### Persist state in anyplace
+### Persist state in any place
+
+You need to control the state by yourself, using the `set_state` function.
 
 ```python
 import streamlit as st
@@ -64,12 +66,10 @@ st.text(f"Value: {get_state(slot, 'state1')}")
 
 ### Persist state after form submission
 
-Now you get the idea of preserving state in form, how to preserve state 
-of the action happen after the submission.
+In this example, we have a form to control 
+how the line chart is drawn.
 
-For example, you control how your line chart is drawn using a form.
-
-Let's do some set up first
+Let's do some setup first
 
 ```python
 import numpy as np
@@ -86,8 +86,12 @@ def chart_data(line_count, data_size):
 
 ```
 
-This is very similar to the first example, except we add other state
-for the run button.
+Now we can use fire state to record the user action.
+
+The idea is that the first time user opens the page, they never click the run button,
+so the number of times they click a button is 0. When it no longer is 0, which means user clicked it. 
+Therefore, the plot is rendered or updated (if chart data is changed).
+
 
 ```python
 from fire_state import create_store, get_state, set_state, form_update
@@ -112,16 +116,10 @@ if (prev_run_state != 0) or run:
     set_state(PAGE_SLOT, ("run", prev_run_state + 1))
 ```
 
-The idea is that the first time user open the page, they never click the run button,
-so the number time they click a button is 0, we can use it as a reference to record the state
-of the button. 
-
-When it no longer is 0, that means user clicked it. Hence, The plot will always be rendered or updated.
-
 
 ### Reset the state
 
-If you want to allow user to reset the state:
+Use the `set_store` function to update states in a batch:
 
 ```python
 import streamlit as st
@@ -144,10 +142,10 @@ st.button("Reset", on_click=reset)
 ```
 
 The `set_store` and `get_store` functions allow you to
-modify and get your state in batch.
+modify and get your state in a batch.
 
 
 ## The Life Cycle of State
 
-The state will persist if you don't close the page or refresh. The state instance
-will only be destroyed if you stop your app.
+The state persists if you don't close or refresh the page. The state instance
+is only destroyed if you stop your app.
