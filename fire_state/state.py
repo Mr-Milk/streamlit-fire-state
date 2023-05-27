@@ -1,7 +1,11 @@
 from typing import List, Tuple, Any
 
 import streamlit as st
-from streamlit.scriptrunner import get_script_run_ctx
+try:
+    from streamlit.scriptrunner import get_script_run_ctx
+except ImportError:
+    from streamlit.runtime.scriptrunner.script_run_context import \
+        get_script_run_ctx
 
 
 class Storage:
