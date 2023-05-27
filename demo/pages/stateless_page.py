@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-from streamlit.scriptrunner import get_script_run_ctx
+from streamlit.runtime.scriptrunner.script_run_context import \
+    get_script_run_ctx
 
 np.random.seed(0)
 PAGE_SLOT = "Home"
