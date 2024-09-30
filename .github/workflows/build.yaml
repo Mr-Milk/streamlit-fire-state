@@ -20,6 +20,6 @@ jobs:
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
         env:
           FLIT_INDEX_URL: https://upload.pypi.org/legacy/
-          FLIT_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          FLIT_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          FLIT_USERNAME: __token__
+          FLIT_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: flit publish
