@@ -1,11 +1,29 @@
 from typing import List, Tuple, Any
 
 import streamlit as st
+
+# Try the different possible import paths for get_script_run_ctx
 try:
-    from streamlit.scriptrunner import get_script_run_ctx
-except ImportError:
-    from streamlit.runtime.scriptrunner.script_run_context import \
-        get_script_run_ctx
+    # Streamlit 1.x and above (latest versions)
+    from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
+except (ImportError, ModuleNotFoundError):
+    try:
+        # Streamlit 0.x to 1.x (older versions)
+        from streamlit.scriptrunner.script_run_context import get_script_run_ctx
+    except (ImportError, ModuleNotFoundError):
+        try:
+            # Some Streamlit beta or intermediate versions
+            from streamlit.runtime.scriptrunner_utils.script_run_context import get_script_run_ctx
+        except (ImportError, ModuleNotFoundError):
+            # If the function doesn't exist at all in the current version, define a fallback function.
+            def get_script_run_ctx(suppress_warning: bool = False):
+                """
+                Fallback function if get_script_run_ctx is not available.
+                Returns None, assuming no context is available.
+                """
+                if not suppress_warning:
+                    print("Warning: ScriptRunContext not available in this Streamlit version.")
+                return None
 
 
 class Storage:
